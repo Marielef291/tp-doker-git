@@ -1,0 +1,42 @@
+volumes:
+  local_pgdata:
+  pgadmin_data:
+
+services:
+  postgres:
+    image: postgres:9.4
+    container_name: posgrest-local
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5433:5432"
+    
+  redis:
+    container_name: redis
+    image: redis:5.0-alpine3.10
+    restart: always
+    ports:
+      - '6379:6379'
+    
+  nodejs-result:
+    container_name: node
+    build: /result
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+  worker-net:
+    container_name: worker
+    build: ./worker
+
+  flask-vote:
+    container_name: flask
+    build: ./vote
+    ports:
+      - "80:80"
+    depends_on:
+      - redis

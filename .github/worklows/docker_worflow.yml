@@ -1,0 +1,23 @@
+name: build and push
+on: push
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+    steps:
+      - name: ckeckout
+        uses: actions/checkout@v4
+
+      - name: login docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.USERNAME }}
+          password: ${{ env.PASSWORD }}
+
+      - name: builkd image
+        run: docker build -t $USERNAME/spring_app .
+
+      - name: push image
+        run : docker push $USERNAME/spring_app
