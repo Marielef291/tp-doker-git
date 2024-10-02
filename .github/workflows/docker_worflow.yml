@@ -19,5 +19,5 @@ jobs:
       - name: build image
         run: docker build -t $USERNAME/voting_app .
 
-      - name: push image
+      - name: push image vers docker
         run : docker push $USERNAME/voting_app
